@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Auto — Quality Used Cars in Hamilton</title>
+    <meta name="description" content="Quality pre-owned vehicles in Hamilton, Ontario. Browse our inventory, estimate financing, and book a test drive.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ===== Header / Nav ===== -->
+    <header class="site-header" id="top">
+        <div class="wrap nav">
+            <a href="#top" class="brand">
+                <span class="brand-mark" aria-hidden="true">&#9211;</span>
+                <span class="brand-name">APEX<span>AUTO</span></span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+            <nav class="nav-links" id="navLinks" aria-label="Primary">
+                <a href="#inventory">Inventory</a>
+                <a href="#finance">Financing</a>
+                <a href="#why">Why Apex</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <a class="btn btn-primary btn-sm header-cta" href="#contact">Book a test drive</a>
+        </div>
+    </header>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="wrap hero-inner">
+            <p class="eyebrow">Hamilton, Ontario · Since 2009</p>
+            <h1>Find your next car with confidence.</h1>
+            <p class="lede">Hand-picked, fully inspected pre-owned vehicles — with transparent pricing, financing, and no-pressure test drives.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="#inventory">Browse inventory</a>
+                <a class="btn btn-outline" href="#finance">Estimate payments</a>
+            </div>
+            <div class="hero-stats">
+                <div><b id="heroCount">—</b><span>Cars in stock</span></div>
+                <div><b>150+</b><span>Point inspection</span></div>
+                <div><b>4.9★</b><span>Google rating</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Inventory ===== -->
+    <section id="inventory" class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>Our inventory</h2>
+                <p>Every vehicle is safety-certified and inspection-ready. Click a car for full details.</p>
+            </div>
+            <div class="inventory-controls">
+                <div class="filters" id="bodyFilters" role="tablist" aria-label="Filter by body type"></div>
+                <div class="sort-wrap">
+                    <label for="sortSelect">Sort</label>
+                    <select id="sortSelect">
+                        <option value="featured">Featured</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="km-asc">Lowest km</option>
+                        <option value="year-desc">Newest year</option>
+                    </select>
+                </div>
+            </div>
+            <div class="vehicle-grid" id="vehicleGrid"></div>
+        </div>
+    </section>
+
+    <!-- ===== Finance calculator ===== -->
+    <section id="finance" class="section section-dark">
+        <div class="wrap finance-grid">
+            <div class="finance-copy">
+                <h2>Estimate your payments</h2>
+                <p>Get a quick idea of your monthly payment. Adjust the price, down payment, term, and rate — then apply for pre-approval in minutes.</p>
+                <a class="btn btn-primary" href="#contact">Get pre-approved</a>
+            </div>
+            <div class="calc">
+                <div class="calc-row"><label>Vehicle price</label><div class="calc-input">$<input type="number" id="cPrice" value="29900" min="0" step="500"></div></div>
+                <div class="calc-row"><label>Down payment</label><div class="calc-input">$<input type="number" id="cDown" value="3000" min="0" step="500"></div></div>
+                <div class="calc-row"><label>Term <span id="cTermLabel">60 months</span></label><input type="range" id="cTerm" min="12" max="84" step="12" value="60"></div>
+                <div class="calc-row"><label>Interest rate (APR) <span id="cRateLabel">6.9%</span></label><input type="range" id="cRate" min="0" max="15" step="0.1" value="6.9"></div>
+                <div class="calc-result">
+                    <span>Estimated monthly</span>
+                    <strong id="cMonthly">$0</strong>
+                </div>
+                <p class="calc-note">Estimate only, taxes &amp; fees excluded. On approved credit.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Why Apex ===== -->
+    <section id="why" class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>Why buy from Apex</h2>
+                <p>Buying used should be easy and honest. Here’s how we do it.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card"><span aria-hidden="true">&#128270;</span><h3>150-point inspection</h3><p>Every vehicle is fully inspected and safety-certified before it hits the lot.</p></div>
+                <div class="why-card"><span aria-hidden="true">&#128176;</span><h3>Transparent pricing</h3><p>No haggling, no surprises — the price you see is a fair market price.</p></div>
+                <div class="why-card"><span aria-hidden="true">&#128203;</span><h3>Flexible financing</h3><p>We work with multiple lenders to get you approved, all credit considered.</p></div>
+                <div class="why-card"><span aria-hidden="true">&#128666;</span><h3>Trade-ins welcome</h3><p>Get a fair value on your current vehicle toward your next one.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Contact / inquiry ===== -->
+    <section id="contact" class="section section-tint">
+        <div class="wrap contact-grid">
+            <div class="contact-info">
+                <h2>Visit or get in touch</h2>
+                <p>Book a test drive, ask about a vehicle, or get pre-approved — we’ll reply within one business day.</p>
+                <ul class="contact-list">
+                    <li><b>Address</b>2200 Barton St E, Hamilton, ON</li>
+                    <li><b>Phone</b><a href="tel:+19055550177">(905) 555-0177</a></li>
+                    <li><b>Email</b><a href="mailto:sales@apexauto.example">sales@apexauto.example</a></li>
+                    <li><b>Hours</b>Mon–Fri 9–7 · Sat 9–5 · Sun closed</li>
+                </ul>
+            </div>
+            <form class="inquiry-form" id="inquiryForm">
+                <div class="field-row">
+                    <div class="field"><label>Name<input name="name" required></label></div>
+                    <div class="field"><label>Phone<input type="tel" name="phone" required></label></div>
+                </div>
+                <div class="field"><label>Email<input type="email" name="email" required></label></div>
+                <div class="field"><label>Vehicle of interest<input name="vehicle" id="inquiryVehicle" placeholder="Any — browsing"></label></div>
+                <div class="field"><label>Message<textarea name="message" rows="3" placeholder="I’d like to book a test drive for…"></textarea></label></div>
+                <button type="submit" class="btn btn-primary btn-block">Send inquiry</button>
+                <p class="fineprint" id="inquiryNote">Demo form — submissions aren’t sent yet. See the README to wire it to email or Firebase.</p>
+            </form>
+        </div>
+    </section>
+
+    <!-- ===== Footer ===== -->
+    <footer class="site-footer">
+        <div class="wrap footer-grid">
+            <div>
+                <a href="#top" class="brand brand--footer"><span class="brand-mark" aria-hidden="true">&#9211;</span><span class="brand-name">APEX<span>AUTO</span></span></a>
+                <p class="muted">Quality pre-owned vehicles,<br>Hamilton, Ontario.</p>
+            </div>
+            <div><h4>Inventory</h4><p class="muted">SUVs · Sedans · Trucks<br>Hatchbacks · EVs &amp; Hybrids</p></div>
+            <div><h4>Contact</h4><p class="muted"><a href="tel:+19055550177">(905) 555-0177</a><br><a href="mailto:sales@apexauto.example">sales@apexauto.example</a><br>Dealer #ON-44231</p></div>
+        </div>
+        <div class="wrap footer-bottom">
+            <small>&copy; <span id="year"></span> Apex Auto — Demo template by <a href="#">Your Studio</a>. Placeholder photography via <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>.</small>
+        </div>
+    </footer>
+
+    <!-- ===== Vehicle detail modal ===== -->
+    <div class="modal" id="vehicleModal" aria-hidden="true">
+        <div class="modal-card">
+            <button class="icon-btn modal-close" id="vehicleClose" aria-label="Close">&times;</button>
+            <div id="vehicleModalBody"></div>
+        </div>
+    </div>
+
+    <!-- ===== Toast ===== -->
+    <div class="toast" id="toast" hidden></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
