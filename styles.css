@@ -132,6 +132,16 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 .why-card span { font-size: 2rem; }
 .why-card h3 { font-size: 1.1rem; margin: 12px 0 6px; }
 .why-card p { margin: 0; color: var(--muted); font-size: .92rem; }
+.why-card[data-why] { cursor: pointer; transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+.why-card[data-why]:hover, .why-card[data-why]:focus-visible { transform: translateY(-3px); border-color: var(--brand); box-shadow: var(--shadow-md); outline: none; }
+.why-card .why-more { display: inline-block; font-size: .82rem !important; font-weight: 700; color: var(--brand); margin-top: 12px; }
+.why-modal-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.why-modal-icon { font-size: 1.8rem; }
+.why-modal-head h3 { margin: 0; font-size: 1.4rem; }
+.why-modal-list { list-style: none; padding: 0; margin: 0 0 20px; }
+.why-modal-list li { padding: 9px 0 9px 26px; position: relative; border-top: 1px solid var(--line); font-size: .95rem; }
+.why-modal-list li:first-child { border-top: none; }
+.why-modal-list li::before { content: "✓"; position: absolute; left: 0; color: var(--brand); font-weight: 800; }
 
 /* ---------- Contact ---------- */
 .contact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 44px; align-items: start; }

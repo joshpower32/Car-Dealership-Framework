@@ -182,6 +182,40 @@ $("vehicleClose").addEventListener("click", closeVehicle);
 modal.addEventListener("click", (e) => { if (e.target === modal) closeVehicle(); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeVehicle(); });
 
+// --- "Why buy from Apex" detail modal (reuses the vehicle modal shell) ---
+const WHY = [
+  { icon: "&#128270;", title: "150-point inspection", lead: "Every vehicle is fully inspected and safety-certified before it ever reaches the lot — so you drive away with confidence.",
+    points: ["Full mechanical and safety inspection by licensed technicians", "Brakes, tires, suspension, fluids, battery and electronics all checked", "Ontario Safety Standard Certificate included with every sale", "Any required repairs completed before the vehicle is listed", "Inspection report available on request"] },
+  { icon: "&#128176;", title: "Transparent pricing", lead: "The price you see is a fair, market-based price — no games, no pressure, no back-and-forth.",
+    points: ["Every price benchmarked against current market data", "No hidden fees — taxes and licensing shown up front", "Free CARFAX history report on every vehicle", "Price drops shown openly so you know you’re getting value"] },
+  { icon: "&#128203;", title: "Flexible financing", lead: "We work with multiple lenders to find a payment that fits your budget — all credit situations welcome.",
+    points: ["Multiple banks and lenders competing for your business", "Good credit, bad credit, or first-time buyer — all considered", "Quick pre-approval, often the same day", "Flexible terms and down-payment options", "Use the payment calculator on this page to estimate first"] },
+  { icon: "&#128666;", title: "Trade-ins welcome", lead: "Put the value of your current vehicle straight toward your next one and lower what you finance.",
+    points: ["Fair, transparent appraisal based on real market value", "Trade value applied directly to your purchase", "We handle the paperwork and any remaining loan on your trade", "Don’t want to sell privately? We make it easy"] },
+];
+function openWhy(i) {
+  const w = WHY[i];
+  if (!w) return;
+  $("vehicleModalBody").innerHTML = `
+    <div class="vm-body why-modal">
+      <div class="why-modal-head"><span class="why-modal-icon" aria-hidden="true">${w.icon}</span><h3>${esc(w.title)}</h3></div>
+      <p class="vm-desc">${esc(w.lead)}</p>
+      <ul class="why-modal-list">${w.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
+      <div class="vm-actions">
+        <button class="btn btn-primary" id="whyContact">Talk to our team</button>
+        <button class="btn btn-ghost" id="whyBrowse">Browse inventory</button>
+      </div>
+    </div>`;
+  $("whyContact").addEventListener("click", () => { closeVehicle(); $("contact").scrollIntoView({ behavior: "smooth" }); });
+  $("whyBrowse").addEventListener("click", () => { closeVehicle(); $("inventory").scrollIntoView({ behavior: "smooth" }); });
+  modal.classList.add("open"); modal.setAttribute("aria-hidden", "false"); document.body.style.overflow = "hidden";
+}
+document.querySelectorAll(".why-card[data-why]").forEach((c) => {
+  const open = () => openWhy(+c.dataset.why);
+  c.addEventListener("click", open);
+  c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+});
+
 // --- Finance calculator -------------------------------------------------
 function updateCalc() {
   const price = +$("cPrice").value || 0;
