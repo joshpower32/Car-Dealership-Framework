@@ -133,17 +133,18 @@ function renderGrid() {
 $("sortSelect").addEventListener("change", (e) => { sortMode = e.target.value; renderGrid(); });
 
 async function hydrateImages() {
-  for (const v of VEHICLES) {
-    if (vehImage(v)) continue;
+  // Parallel fetch so all vehicle photos arrive together, not one-by-one.
+  await Promise.all(VEHICLES.map(async (v) => {
+    if (vehImage(v)) return;
     try {
       const photo = await fetchPexels(v.query);
-      if (!photo) continue;
-      imgCache[v.id] = { url: photo.src.large, photographer: photo.photographer };
+      if (!photo) return;
+      imgCache[v.id] = { url: photo.src.medium, photographer: photo.photographer };
       localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
       const el = grid.querySelector(`.vehicle-media[data-id="${v.id}"]`);
       if (el) { const old = el.querySelector("svg, img"); if (old) old.outerHTML = vehMedia(v, 1); }
     } catch (_) { /* keep SVG */ }
-  }
+  }));
 }
 
 // --- Vehicle detail modal ----------------------------------------------
