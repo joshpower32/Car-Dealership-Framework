@@ -13,6 +13,12 @@
 const CONFIG = {
   pexelsKey: "4SuTxTJkprUsJAP1CZoSkd412wKx4EuXt7xfK5HzZf9DreiCe8Wv0twm",
   heroQuery: "car dealership showroom",
+  // === LEAD DELIVERY (set before selling) — free key at https://web3forms.com
+  // Enter the client's email, paste the key here. Until set, the form opens the
+  // visitor's email app as a fallback so no lead is lost.
+  web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY",
+  contactEmail: "sales@apexauto.example",
+  businessName: "Apex Auto",
 };
 
 // id, year, make, model, body, price, km, fuel, trans, drivetrain, badge, query
@@ -234,13 +240,38 @@ function updateCalc() {
 });
 
 // --- Inquiry form -------------------------------------------------------
-$("inquiryForm").addEventListener("submit", (e) => {
+const KEY_PLACEHOLDER = "YOUR_WEB3FORMS_ACCESS_KEY";
+$("inquiryForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  // === WIRE UP REAL DELIVERY: Formspree action, or Firebase write =====
-  const name = new FormData(e.target).get("name") || "";
-  e.target.reset();
-  toast(`Thanks ${String(name).split(" ")[0]} — we’ll be in touch within 1 business day!`);
-  $("inquiryNote").textContent = "Demo: captured locally. Wire to email/Firebase for real delivery (see README).";
+  const form = e.target;
+  const fd = new FormData(form);
+  const firstName = String(fd.get("name") || "there").split(" ")[0];
+  const btn = form.querySelector('button[type="submit"]');
+
+  if (!CONFIG.web3formsKey || CONFIG.web3formsKey === KEY_PLACEHOLDER) {
+    const subject = encodeURIComponent(`New vehicle inquiry — ${fd.get("name") || ""}`);
+    const body = encodeURIComponent([...fd.entries()].filter(([k]) => k !== "botcheck").map(([k, v]) => `${k}: ${v}`).join("\n"));
+    window.location.href = `mailto:${CONFIG.contactEmail}?subject=${subject}&body=${body}`;
+    toast("Opening your email app to send your inquiry…");
+    return;
+  }
+
+  fd.append("access_key", CONFIG.web3formsKey);
+  fd.append("subject", `🔔 NEW LEAD — Vehicle inquiry from ${fd.get("name") || "website"}`);
+  fd.append("from_name", CONFIG.businessName);
+  btn.disabled = true; const orig = btn.textContent; btn.textContent = "Sending…";
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", { method: "POST", headers: { Accept: "application/json" }, body: fd });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      form.reset();
+      toast(`Thanks ${firstName} — we’ll be in touch within 1 business day!`);
+      $("inquiryNote").textContent = "Inquiry sent ✓ — we’ll reply by email shortly.";
+    } else { throw new Error(data.message || "Send failed"); }
+  } catch (_) {
+    toast(`Couldn’t send — please email ${CONFIG.contactEmail}.`);
+    $("inquiryNote").textContent = `Something went wrong. Please email ${CONFIG.contactEmail} directly.`;
+  } finally { btn.disabled = false; btn.textContent = orig; }
 });
 
 // --- Mobile nav + misc --------------------------------------------------

@@ -124,6 +124,7 @@
                 </ul>
             </div>
             <form class="inquiry-form" id="inquiryForm">
+                <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none !important" aria-hidden="true">
                 <div class="field-row">
                     <div class="field"><label>Name<input name="name" required></label></div>
                     <div class="field"><label>Phone<input type="tel" name="phone" required></label></div>
@@ -132,7 +133,7 @@
                 <div class="field"><label>Vehicle of interest<input name="vehicle" id="inquiryVehicle" placeholder="Any — browsing"></label></div>
                 <div class="field"><label>Message<textarea name="message" rows="3" placeholder="I’d like to book a test drive for…"></textarea></label></div>
                 <button type="submit" class="btn btn-primary btn-block">Send inquiry</button>
-                <p class="fineprint" id="inquiryNote">Demo form — submissions aren’t sent yet. See the README to wire it to email or Firebase.</p>
+                <p class="fineprint" id="inquiryNote">We’ll only use your details to reply about your inquiry — no spam.</p>
             </form>
         </div>
     </section>
