@@ -38,8 +38,10 @@ python3 -m http.server 5540   # then open http://localhost:5540
 
 ## Notes
 
-- Pexels photos are demo placeholders (free key, same as the other frameworks), cached in
-  `localStorage`. Swap for the client's real vehicle photos when sold.
+- Demo photos are pinned Pexels images — direct URLs in the `PEXELS_PHOTOS` map in
+  `app.js`, so they load instantly with no API key or runtime fetching. To change a
+  photo, paste a new pexels.com image address into the map; swap in the client's real
+  photos (an `image:` path per vehicle) when sold.
 - Hosting upgrade path for paying clients: Netlify / Cloudflare Pages + custom domain.
 
 ## Selling this site to a client (lead delivery)

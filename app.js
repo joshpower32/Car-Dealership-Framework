@@ -11,7 +11,6 @@
    ===================================================================== */
 
 const CONFIG = {
-  pexelsKey: "4SuTxTJkprUsJAP1CZoSkd412wKx4EuXt7xfK5HzZf9DreiCe8Wv0twm",
   heroQuery: "car dealership showroom",
   // === LEAD DELIVERY (set before selling) — free key at https://web3forms.com
   // Enter the client's email, paste the key here. Until set, the form opens the
@@ -37,6 +36,27 @@ const VEHICLES = [
   { id: "v12", year: 2020, make: "Subaru", model: "Outback Touring", body: "Wagon", price: 31200, km: 55000, fuel: "Gas", trans: "Automatic", drive: "AWD", badge: "Sold", badgeSold: true, query: "subaru outback wagon" },
 ];
 
+// --- Demo photos: pinned Pexels shots, keyed by each vehicle's `query` --
+// Direct image URLs load with the page — no API call, no key, no pop-in.
+// To change a photo: browse pexels.com, copy the image address, paste here.
+const PEXELS_PHOTOS = {
+  "toyota rav4 suv": { u: "https://images.pexels.com/photos/9598106/pexels-photo-9598106.jpeg", p: "Erik Mclean" },
+  "honda civic sedan": { u: "https://images.pexels.com/photos/6794821/pexels-photo-6794821.jpeg", p: "Zachary Vessels" },
+  "ford f150 truck": { u: "https://images.pexels.com/photos/33336584/pexels-photo-33336584.jpeg", p: "Charles Criscuolo" },
+  "tesla model 3 car": { u: "https://images.pexels.com/photos/10029873/pexels-photo-10029873.jpeg", p: "I'm Zion" },
+  "jeep wrangler": { u: "https://images.pexels.com/photos/17722340/pexels-photo-17722340.jpeg", p: "Vitali Adutskevich" },
+  "mazda cx5 suv": { u: "https://images.pexels.com/photos/11157434/pexels-photo-11157434.jpeg", p: "Amar  Preciado" },
+  "bmw 3 series sedan": { u: "https://images.pexels.com/photos/28522338/pexels-photo-28522338.jpeg", p: "HRK Gallery" },
+  "chevrolet silverado truck": { u: "https://images.pexels.com/photos/9115472/pexels-photo-9115472.jpeg", p: "Jonathan Cooper" },
+  "hyundai tucson suv": { u: "https://images.pexels.com/photos/19911371/pexels-photo-19911371.jpeg", p: "Hyundai Motor Group" },
+  "volkswagen golf gti": { u: "https://images.pexels.com/photos/20809165/pexels-photo-20809165.jpeg", p: "FBO Media" },
+  "audi q5 suv": { u: "https://images.pexels.com/photos/20220997/pexels-photo-20220997.jpeg", p: "Brandon Martinez" },
+  "subaru outback wagon": { u: "https://images.pexels.com/photos/15928393/pexels-photo-15928393.jpeg", p: "Andrés  Chirrisco" },
+  "car dealership showroom": { u: "https://images.pexels.com/photos/395537/pexels-photo-395537.jpeg", p: "David McBee" },
+};
+// Size an image via Pexels CDN params (w = target width in px)
+const px = (u, w) => `${u}?auto=compress&cs=tinysrgb&w=${w}`;
+
 const esc = (s = "") => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const $ = (id) => document.getElementById(id);
 const money = (n) => "$" + Math.round(n).toLocaleString("en-CA");
@@ -55,38 +75,21 @@ function carSVG(seed = 0) {
   </svg>`;
 }
 
-// --- Pexels image cache ------------------------------------------------
-const IMG_CACHE_KEY = "apexauto_imgcache";
-let imgCache = JSON.parse(localStorage.getItem(IMG_CACHE_KEY) || "{}");
-const vehImage = (v) => v.image || imgCache[v.id]?.url || null;
+// --- Vehicle imagery: real photo > pinned Pexels photo > SVG fallback ---
+const vehImage = (v, w = 640) =>
+  v.image || (PEXELS_PHOTOS[v.query] ? px(PEXELS_PHOTOS[v.query].u, w) : null);
 
-async function fetchPexels(query, orientation = "landscape") {
-  const res = await fetch(
-    `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&orientation=${orientation}`,
-    { headers: { Authorization: CONFIG.pexelsKey } });
-  if (!res.ok) return null;
-  return (await res.json()).photos?.[0] || null;
-}
 function vehMedia(v, seed) {
   const url = vehImage(v);
-  const credit = imgCache[v.id]?.photographer;
-  if (url) return `<img src="${esc(url)}" alt="${esc(title(v))}"${credit ? ` title="Photo: ${esc(credit)} / Pexels"` : ""} loading="lazy">`;
+  const credit = !v.image && PEXELS_PHOTOS[v.query]?.p;
+  if (url) return `<img src="${esc(url)}" alt="${esc(title(v))}"${credit ? ` title="Photo: ${esc(credit)} / Pexels"` : ""} loading="lazy" onerror="this.outerHTML = carSVG(${seed})">`;
   return carSVG(seed);
 }
 
 // --- Hero background ----------------------------------------------------
-async function loadHero() {
-  const hero = $("hero");
-  const cached = imgCache["__hero"]?.url;
-  if (cached) { hero.style.backgroundImage = `url("${cached}")`; return; }
-  try {
-    const photo = await fetchPexels(CONFIG.heroQuery);
-    if (photo) {
-      imgCache["__hero"] = { url: photo.src.landscape, photographer: photo.photographer };
-      localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-      hero.style.backgroundImage = `url("${photo.src.landscape}")`;
-    }
-  } catch (_) { /* dark colour stays */ }
+function loadHero() {
+  const ph = PEXELS_PHOTOS[CONFIG.heroQuery];
+  if (ph) $("hero").style.backgroundImage = `url("${px(ph.u, 1600)}")`;
 }
 
 // --- Inventory: filter + sort + render ---------------------------------
@@ -138,20 +141,6 @@ function renderGrid() {
 
 $("sortSelect").addEventListener("change", (e) => { sortMode = e.target.value; renderGrid(); });
 
-async function hydrateImages() {
-  // Parallel fetch so all vehicle photos arrive together, not one-by-one.
-  await Promise.all(VEHICLES.map(async (v) => {
-    if (vehImage(v)) return;
-    try {
-      const photo = await fetchPexels(v.query);
-      if (!photo) return;
-      imgCache[v.id] = { url: photo.src.medium, photographer: photo.photographer };
-      localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-      const el = grid.querySelector(`.vehicle-media[data-id="${v.id}"]`);
-      if (el) { const old = el.querySelector("svg, img"); if (old) old.outerHTML = vehMedia(v, 1); }
-    } catch (_) { /* keep SVG */ }
-  }));
-}
 
 // --- Vehicle detail modal ----------------------------------------------
 const modal = $("vehicleModal");
@@ -294,4 +283,4 @@ renderFilters();
 renderGrid();
 updateCalc();
 loadHero();
-hydrateImages();
+
